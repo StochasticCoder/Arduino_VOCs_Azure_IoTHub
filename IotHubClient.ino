@@ -1,7 +1,7 @@
 
 static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char *buffer)
 {
-
+    Serial.println("Send IoT Message");
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray((const unsigned char *)buffer, strlen(buffer));
                                                   
     if (messageHandle == NULL)

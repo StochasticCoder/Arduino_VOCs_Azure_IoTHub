@@ -7,6 +7,8 @@ SimpleDHT11 dht(DHT_PIN);
 
 void initSensor()
 {    
+  Serial.println("Init Sensor");  
+
   if(!ccs.begin())
   {
     Serial.println("Failed to start sensor! Please check your wiring.");
@@ -52,7 +54,8 @@ void readMessage( char *payload)
   byte humidity = 0;
   float co2 = 0;
   float tvoc = 0;
-  
+
+ 
   if(!ccs.readData()){
     co2 = ccs.geteCO2();
     tvoc = ccs.getTVOC();
@@ -107,6 +110,7 @@ void readMessage( char *payload)
   
   
   serializeJson(root,payload,MESSAGE_MAX_LEN);
+  
 
 }
 

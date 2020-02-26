@@ -38,7 +38,7 @@ void initSerial()
 
 void initWifi()
 {
- 
+  Serial.println("Init WiFi");  
   if(WiFi.status() == WL_NO_SHIELD)
   {
     Serial.println("Wifi shield not present");
@@ -61,7 +61,7 @@ void initWifi()
 
 
 void setup() {
-  delay(10000);
+  delay(100);
   pinMode(D0, INPUT);
   pinMode(D1, INPUT);
   pinMode(D2, INPUT);
@@ -70,7 +70,8 @@ void setup() {
   initSerial();
   initWifi();
   initSensor();
-  
+
+  Serial.println("get iot hub client...");
   iotHubClientHandle = IoTHubClient_LL_CreateFromConnectionString(conStr, MQTT_Protocol);
   
   if(iotHubClientHandle == NULL)
@@ -78,24 +79,31 @@ void setup() {
     Serial.println("Failed on IoTHubClient_CreateFromConnectionString.");
     while (1);
   }
-  
+
+  Serial.println("got client...");
   IoTHubClient_LL_SetOption(iotHubClientHandle, "product_info", "VOC-Monitor");
-  IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, receiveMessageCallback, NULL);
+  if(IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, receiveMessageCallback, NULL)!= IOTHUB_CLIENT_OK)
+  {
+    Serial.println("ERROR: IoTHubClient_LL_SetMessageCallback..........FAILED!");
+  }
+ 
   IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, deviceMethodCallback, NULL);
   IoTHubClient_LL_SetDeviceTwinCallback(iotHubClientHandle, twinCallback, NULL);
 
+  Serial.println("do work...");
   IoTHubClient_LL_DoWork(iotHubClientHandle);
 }
 
 
 void loop() {
-
+ 
   if (!messagePending && messageSending)
   {  
+     Serial.println("Prep Message....");
     char messagePayload[MESSAGE_MAX_LEN];
     readMessage( messagePayload);    
     sendMessage(iotHubClientHandle, messagePayload);
-    Serial.println(messagePayload);
+    Serial.println(messagePayload); 
     delay(interval);
   }
     IoTHubClient_LL_DoWork(iotHubClientHandle);

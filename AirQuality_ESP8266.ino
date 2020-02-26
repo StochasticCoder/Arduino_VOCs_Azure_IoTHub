@@ -61,9 +61,10 @@ void initWifi()
 
 
 void setup() {
-  delay(1000);
-  Wire.begin(5, 4);
+  delay(10000);
   pinMode(D0, INPUT);
+  pinMode(D1, INPUT);
+  pinMode(D2, INPUT);
   pinMode(LED_PIN, OUTPUT); 
   
   initSerial();

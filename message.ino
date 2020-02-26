@@ -46,7 +46,7 @@ void initSensor()
 
 
 
-String readMessage( char *payload)
+void readMessage( char *payload)
 {
   byte temperature = 0;
   byte humidity = 0;
